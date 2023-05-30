@@ -29,13 +29,11 @@ jobs:
         cache: maven
     - name: Build the jar
       run: mvn package
-    - name: Upload to Github
+    - name: Upload the Build Artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: v${{ steps.release-version.outputs.version }} - ${{ matrix.name }}
-        version: v${{ steps.release-version.outputs.version }}
-        version-type: release
-        files: ${{ matrix.directory }}/target/GunStop-*.jar
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: GunStop-Plugin.jar
+        path: target/GunStop-*.jar
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     #- name: Update dependency graph
