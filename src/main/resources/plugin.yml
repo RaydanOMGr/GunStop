@@ -1,0 +1,5 @@
+name: GunStop
+version: '${project.version}'
+main: me.andreasmelone.gunstop.GunStop
+author: AndreasMelone
+load: STARTUP
