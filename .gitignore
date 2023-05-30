@@ -1,3 +1,4 @@
+# deprecated stuff, it isn't used and isn't needed so I won't commit it 
 src/main/java/me/andreasmelone/gunstop/functions/Cooldown.java
 src/main/java/me/andreasmelone/gunstop/functions/ResourcePackManager.java
 
