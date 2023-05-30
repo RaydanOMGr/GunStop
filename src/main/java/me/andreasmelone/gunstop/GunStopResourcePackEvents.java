@@ -19,23 +19,20 @@ public class GunStopResourcePackEvents implements Listener {
     @EventHandler
     public void onPlayedJoinWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
-//        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
-//            return;
-//        }
+        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
+            return;
+        }
 
-        logger.info("Player " + player.getName() + " joined world " + player.getWorld().getName() + ".");
-        System.out.println("Player " + player.getName() + " joined world " + player.getWorld().getName() + ".");
         player.setResourcePack("http://dono-02.danbot.host:25268/gunstoppack.zip");
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-//        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
-//            return;
-//        }
-        logger.info("Player " + player.getName() + " joined world " + player.getWorld().getName() + ".");
-        System.out.println("Player " + player.getName() + " joined world " + player.getWorld().getName() + ".");
+        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
+            return;
+        }
+
         player.setResourcePack("http://dono-02.danbot.host:25268/gunstoppack.zip");
     }
 }
