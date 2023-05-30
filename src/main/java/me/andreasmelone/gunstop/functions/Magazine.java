@@ -2,9 +2,7 @@ package me.andreasmelone.gunstop.functions;
 
 import me.andreasmelone.gunstop.GunStop;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -23,9 +21,9 @@ public class Magazine {
         this.reloadTimeMap = new HashMap<>();
     }
 
-    public boolean hasBullets(Player player) {
-        return getBullets(player) > 0;
-    }
+//    public boolean hasBullets(Player player) {
+//        return getBullets(player) > 0;
+//    }
 
     public void setBullets(Player player, int bullets) {
         bulletsMap.put(player.getName(), bullets);
