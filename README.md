@@ -10,4 +10,7 @@ whitelist:
 It should be self-explainatory, but if you still don't understand, those are the whitelisted worlds, the worlds the plugin works in. In the world, mobs don't drop anything (exp, loot) and the stone shovel is a gun, the only gun right now.
 
 # Guns
-Since this is a plugin about guns, this plugin has guns. Currently the only gun is the Stone Shovel which is the Desert Eagle .50 cal AE.
+Since this is a plugin about guns, this plugin has guns. Currently there are 3 guns. 
+1. The Stone Shovel which is the Desert Eagle .50 cal AE.
+2. The Wooden Shovel which is the RPG
+3. The Wooden Hoe which is the AK 47
