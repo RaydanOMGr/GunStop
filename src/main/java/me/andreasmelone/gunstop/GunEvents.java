@@ -1,16 +1,18 @@
 package me.andreasmelone.gunstop;
 
+import me.andreasmelone.gunstop.magazines.AKMagazine;
+import me.andreasmelone.gunstop.magazines.DeagleMagazine;
+import me.andreasmelone.gunstop.magazines.RPGMagazine;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ExperienceOrb;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -19,9 +21,16 @@ public class GunEvents implements Listener {
     private final GunStop plugin;
     private final Logger logger;
 
+    DeagleMagazine deagle;
+    RPGMagazine rpg_1;
+    AKMagazine ak_47;
+
     public GunEvents(GunStop gunStop) {
         plugin = gunStop;
         logger = plugin.LOGGER;
+        deagle = new DeagleMagazine(plugin);
+        rpg_1 = new RPGMagazine(plugin);
+        ak_47 = new AKMagazine(plugin);
     }
 
     @EventHandler
@@ -36,21 +45,23 @@ public class GunEvents implements Listener {
             ItemStack item = event.getItem();
             //plugin.LOGGER.info("Player " + player.getName() + " tried to shoot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
 
-            if(!event.getAction().name().equals("RIGHT_CLICK_AIR") || !event.getAction().name().equals("RIGHT_CLICK_BLOCK")) return;
+            //if(!event.getAction().name().equals("RIGHT_CLICK_AIR") || !event.getAction().name().equals("RIGHT_CLICK_BLOCK")) return;
+            if(!event.getAction().name().contains("RIGHT_CLICK")) return;
 
             Material itemType = item.getType();
 
             if (itemType == Material.STONE_SPADE) {
+                event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
-                if (plugin.magazine.isReloading(player)) {
-                    player.sendMessage("Reloading " + plugin.magazine.getReloadTime(player) + "... Please wait.");
+                if (deagle.isReloading(player)) {
+                    player.sendMessage("Reloading " + deagle.getReloadTime(player) + "... Please wait.");
                     event.setCancelled(true);
                     return;
                 }
 
                 // Start the reload
-                plugin.magazine.shoot(player);
+                deagle.shoot(player);
 
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
@@ -61,8 +72,50 @@ public class GunEvents implements Listener {
 
                 arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 arrow.setMetadata("damage", new FixedMetadataValue(plugin, "15"));
+            } else if(itemType == Material.WOOD_SPADE) {
+                event.setCancelled(true);
+                //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
+                // Check if the player is reloading
+                if (rpg_1.isReloading(player)) {
+                    player.sendMessage("Reloading " + rpg_1.getReloadTime(player) + "... Please wait.");
+                    event.setCancelled(true);
+                    return;
+                }
+
+                // Start the reload
+                rpg_1.shoot(player);
+
+                // Shoot the projectile
+                TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
+                tnt.setVelocity(player.getLocation().getDirection().multiply(2.55));
+                tnt.setFuseTicks(60);
+
+                tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                tnt.setMetadata("damage", new FixedMetadataValue(plugin, "35"));
 
                 event.setCancelled(true);
+            } else if(itemType == Material.WOOD_HOE) {
+                event.setCancelled(true);
+                //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
+                // Check if the player is reloading
+                if (ak_47.isReloading(player)) {
+                    player.sendMessage("Reloading " + ak_47.getReloadTime(player) + "... Please wait.");
+                    event.setCancelled(true);
+                    return;
+                }
+
+                // Start the reload
+                ak_47.shoot(player);
+
+                // Shoot the projectile
+                Arrow arrow = player.launchProjectile(Arrow.class);
+
+                arrow.setVelocity(player.getLocation().getDirection().multiply(7.5));
+                arrow.setCritical(true);
+                arrow.setShooter(player);
+
+                arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                arrow.setMetadata("damage", new FixedMetadataValue(plugin, "3"));
             }
         }
     }
@@ -111,6 +164,14 @@ public class GunEvents implements Listener {
                 event.setCancelled(true);
             }
         }
+
+        if(damager instanceof TNTPrimed) {
+            TNTPrimed tnt = (TNTPrimed) damager;
+            if(tnt.hasMetadata("isBullet")) {
+                if(!tnt.hasMetadata("damage")) return;
+                event.setDamage(Double.parseDouble(tnt.getMetadata("damage").get(0).asString()));
+            }
+        }
     }
 
     @EventHandler
@@ -121,5 +182,58 @@ public class GunEvents implements Listener {
 
         event.setDroppedExp(0);
         event.getDrops().clear();
+    }
+
+    @EventHandler
+    public void onTntExplode(EntityExplodeEvent event) {
+        if (!plugin.config.getString("whitelist").contains(event.getEntity().getWorld().getName())) {
+            return;
+        }
+
+        if(event.getEntity() instanceof TNTPrimed) {
+            if(event.getEntity().hasMetadata("isBullet")) {
+                event.blockList().clear();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onSelectedSlotChange(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        ItemStack newItem = event.getPlayer().getInventory().getItem(event.getNewSlot());
+        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
+            return;
+        }
+
+        if(newItem != null) {
+            if(newItem.getType() == Material.STONE_SPADE) {
+                if(deagle.hasBullets(player)) {
+                    if(deagle.isReloading(player)) {
+                        deagle.showReloadTimeOnXPBar(player);
+                    } else {
+                        deagle.showBulletsOnXPBar(player);
+                    }
+                }
+            } else if(newItem.getType() == Material.WOOD_SPADE) {
+                if(rpg_1.hasBullets(player)) {
+                    if(rpg_1.isReloading(player)) {
+                        rpg_1.showReloadTimeOnXPBar(player);
+                    } else {
+                        rpg_1.showBulletsOnXPBar(player);
+                    }
+                }
+            } else if(newItem.getType() == Material.WOOD_HOE) {
+                if(ak_47.hasBullets(player)) {
+                    if(ak_47.isReloading(player)) {
+                        ak_47.showReloadTimeOnXPBar(player);
+                    } else {
+                        ak_47.showBulletsOnXPBar(player);
+                    }
+                }
+            } else {
+                player.setExp(0);
+                player.setLevel(0);
+            }
+        }
     }
 }
