@@ -1,4 +1,6 @@
 .idea
+.github/workflows
 target
 
 GunStop.iml
+README.md
