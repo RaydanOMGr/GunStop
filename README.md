@@ -3,7 +3,7 @@ This plugin (GunStop) is made for my Minecraft Server. If you need it you can ta
 
 # Configuration
 This plugin doesn't have a big config. Here is the default config:
-```
+```yml
 whitelist:
 - world
 ```
