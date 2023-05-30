@@ -36,7 +36,7 @@ public class GunEvents implements Listener {
             ItemStack item = event.getItem();
             //plugin.LOGGER.info("Player " + player.getName() + " tried to shoot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
 
-            //if(!event.getAction().name().equals("RIGHT_CLICK_AIR") || !event.getAction().name().equals("RIGHT_CLICK_BLOCK")) return;
+            if(!event.getAction().name().equals("RIGHT_CLICK_AIR") || !event.getAction().name().equals("RIGHT_CLICK_BLOCK")) return;
 
             Material itemType = item.getType();
 
