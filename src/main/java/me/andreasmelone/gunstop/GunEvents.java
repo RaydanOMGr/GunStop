@@ -234,6 +234,9 @@ public class GunEvents implements Listener {
                 player.setExp(0);
                 player.setLevel(0);
             }
+        } else {
+            player.setExp(0);
+            player.setLevel(0);
         }
     }
 }

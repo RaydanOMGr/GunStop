@@ -20,7 +20,7 @@ public class DeagleMagazine extends Magazine {
 
     @Override
     int getMaximumInMagazineReloadTime() {
-        return 0;
+        return 3;
     }
 
     @Override

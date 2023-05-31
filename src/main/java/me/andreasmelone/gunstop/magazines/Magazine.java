@@ -28,7 +28,6 @@ public abstract class Magazine {
 
     public void setBullets(Player player, int bullets) {
         bulletsMap.put(player.getName(), bullets);
-        showBulletsOnXPBar(player);
     }
 
     public int getBullets(Player player) {
@@ -54,9 +53,11 @@ public abstract class Magazine {
         int reloadTime = bullets > 0 ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
         //logger.info("Reload time: " + reloadTime);
         setReloadTime(player, reloadTime);
+        //logger.info("Reload time: " + reloadTime + " maximum in magazine: " + getMaximumInMagazineReloadTime() + " maximum magazine: " + getMaximumMagazineReloadTime());
 
         // Set the XP bar to show the reload time
         //logger.info("Showing reload time on XP bar");
+        //logger.info("Player Item in Hand: " + player.getItemInHand().getType());
         if(player.getInventory().getItemInHand().getType() == getGunItem()) showReloadTimeOnXPBar(player);
 
         // Schedule the reload completion
@@ -67,6 +68,8 @@ public abstract class Magazine {
                 Player updatedPlayer = player.getServer().getPlayer(player.getName());
                 int remainingReloadTime = getReloadTime(player) - 1;
 
+                //logger.info("Updated Player Item in Hand: " + updatedPlayer.getItemInHand().getType());
+
                 // Set the XP bar to show the remaining reload time
                 //logger.info("Showing remaining reload time on XP bar");
                 if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showReloadTimeOnXPBar(player);
@@ -74,21 +77,22 @@ public abstract class Magazine {
                 // Update the reload time
                 //logger.info("Updating reload time");
                 setReloadTime(player, remainingReloadTime);
+                //logger.info("Reload time: " + remainingReloadTime);
 
                 // Cancel the task if the reload time is over
                 //logger.info("Checking if reload time is over");
                 if (remainingReloadTime <= 0) {
+                    //logger.info("Remaining reload time less than or equal 0, reload: " + reloadTime);
                     //logger.info("Reload time is over");
                     int bullets = getBullets(player);
                     //logger.info("Bullets: " + bullets);
-                    if(bullets <= 1) {
-                        //logger.info("Bullets > 0");
-                        setBullets(player, getMaximumBullets());
-                        //logger.info("Bullets: " + getBullets(player));
+                    if(bullets > 0) {
+                        if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showBulletsOnXPBar(player);
+                        setBullets(player, bullets - 1);
                         cancel();
                     } else {
-                        //logger.info("bullets <= 0, removing 1 bullet");
-                        setBullets(player, bullets -1);
+                        if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showBulletsOnXPBar(player);
+                        setBullets(player, getMaximumBullets());
                         cancel();
                     }
                 }
