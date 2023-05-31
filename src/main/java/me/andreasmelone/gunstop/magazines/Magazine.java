@@ -86,7 +86,7 @@ public abstract class Magazine {
                     //logger.info("Reload time is over");
                     int bullets = getBullets(player);
                     //logger.info("Bullets: " + bullets);
-                    if(bullets > 0) {
+                    if(bullets > 1) {
                         if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showBulletsOnXPBar(player);
                         setBullets(player, bullets - 1);
                         cancel();

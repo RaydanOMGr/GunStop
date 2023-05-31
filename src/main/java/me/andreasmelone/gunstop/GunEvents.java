@@ -66,7 +66,7 @@ public class GunEvents implements Listener {
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
 
-                arrow.setVelocity(player.getLocation().getDirection().multiply(12));
+                arrow.setVelocity(player.getLocation().getDirection().multiply(8.05));
                 arrow.setCritical(true);
                 arrow.setShooter(player);
 
