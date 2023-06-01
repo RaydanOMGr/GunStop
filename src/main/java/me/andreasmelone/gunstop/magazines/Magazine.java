@@ -99,7 +99,7 @@ public abstract class Magazine {
             }
         };
 
-        reloadTask.runTaskTimer(plugin, 0L, 20L);
+        reloadTask.runTaskTimer(plugin, 20L, 20L);
     }
 
     public void showBulletsOnXPBar(Player player) {
