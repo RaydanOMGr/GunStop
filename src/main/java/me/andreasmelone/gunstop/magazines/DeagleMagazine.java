@@ -24,7 +24,7 @@ public class DeagleMagazine extends Magazine {
     }
 
     @Override
-    Material getGunItem() {
+    public Material getGunItem() {
         return Material.STONE_SPADE;
     }
 }

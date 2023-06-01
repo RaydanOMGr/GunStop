@@ -24,7 +24,7 @@ public class RPGMagazine extends Magazine {
     }
 
     @Override
-    Material getGunItem() {
+    public Material getGunItem() {
         return Material.WOOD_SPADE;
     }
 }
