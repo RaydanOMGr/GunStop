@@ -50,7 +50,7 @@ public class GunEvents implements Listener {
 
             Material itemType = item.getType();
 
-            if (itemType == Material.STONE_SPADE) {
+            if (itemType == deagle.getGunItem()) {
                 event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
@@ -72,7 +72,7 @@ public class GunEvents implements Listener {
 
                 arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 arrow.setMetadata("damage", new FixedMetadataValue(plugin, "15"));
-            } else if(itemType == Material.WOOD_SPADE) {
+            } else if(itemType == rpg_1.getGunItem()) {
                 event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
@@ -94,7 +94,7 @@ public class GunEvents implements Listener {
                 tnt.setMetadata("damage", new FixedMetadataValue(plugin, "35"));
 
                 event.setCancelled(true);
-            } else if(itemType == Material.WOOD_HOE) {
+            } else if(itemType == ak_47.getGunItem()) {
                 event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
