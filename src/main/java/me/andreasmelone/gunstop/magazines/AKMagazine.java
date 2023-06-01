@@ -14,13 +14,13 @@ public class AKMagazine extends Magazine {
     }
 
     @Override
-    int getMaximumMagazineReloadTime() {
-        return 20;
+    long getMaximumMagazineReloadTime() {
+        return 20 * 20;
     }
 
     @Override
-    int getMaximumInMagazineReloadTime() {
-        return 0;
+    long getMaximumInMagazineReloadTime() {
+        return 2;
     }
 
     @Override

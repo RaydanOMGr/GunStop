@@ -14,12 +14,12 @@ public class RPGMagazine extends Magazine {
     }
 
     @Override
-    int getMaximumMagazineReloadTime() {
-        return 15;
+    long getMaximumMagazineReloadTime() {
+        return 15 * 20;
     }
 
     @Override
-    int getMaximumInMagazineReloadTime() {
+    long getMaximumInMagazineReloadTime() {
         return 0;
     }
 

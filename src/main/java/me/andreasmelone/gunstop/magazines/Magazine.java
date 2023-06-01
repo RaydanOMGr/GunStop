@@ -13,7 +13,7 @@ public abstract class Magazine {
     private final GunStop plugin;
     private final Logger logger;
     private final Map<String, Integer> bulletsMap;
-    private final Map<String, Integer> reloadTimeMap;
+    private final Map<String, Long> reloadTimeMap;
 
     public Magazine(GunStop plugin) {
         this.plugin = plugin;
@@ -34,12 +34,12 @@ public abstract class Magazine {
         return bulletsMap.getOrDefault(player.getName(), 0);
     }
 
-    public void setReloadTime(Player player, int reloadTimeSeconds) {
+    public void setReloadTime(Player player, long reloadTimeSeconds) {
         reloadTimeMap.put(player.getName(), reloadTimeSeconds);
     }
 
-    public int getReloadTime(Player player) {
-        return reloadTimeMap.getOrDefault(player.getName(), 0);
+    public long getReloadTime(Player player) {
+        return reloadTimeMap.getOrDefault(player.getName(), 0L);
     }
 
     public boolean isReloading(Player player) {
@@ -51,7 +51,7 @@ public abstract class Magazine {
         int minBullets = getMinimumBullets();
         //logger.info("Reloading " + player.getName() + " with " + bullets + " bullets");
 
-        int reloadTime = bullets > minBullets ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
+        long reloadTime = bullets > minBullets ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
         //logger.info("Reload time: " + reloadTime);
         setReloadTime(player, reloadTime);
         //logger.info("Reload time: " + reloadTime + " maximum in magazine: " + getMaximumInMagazineReloadTime() + " maximum magazine: " + getMaximumMagazineReloadTime());
@@ -67,7 +67,7 @@ public abstract class Magazine {
             @Override
             public void run() {
                 Player updatedPlayer = player.getServer().getPlayer(player.getName());
-                int remainingReloadTime = getReloadTime(player) - 1;
+                long remainingReloadTime = getReloadTime(player) - 1;
 
                 setReloadTime(player, remainingReloadTime);
 
@@ -90,21 +90,18 @@ public abstract class Magazine {
                     int bullets = getBullets(player);
                     //logger.info("Bullets: " + bullets);
                     if (bullets > minBullets) {
-                        if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
-                            showBulletsOnXPBar(player);
                         setBullets(player, bullets - 1);
-                        cancel();
                     } else {
-                        if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
-                            showBulletsOnXPBar(player);
                         setBullets(player, getMaximumBullets());
-                        cancel();
                     }
+                    if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                        showBulletsOnXPBar(player);
+                    cancel();
                 }
             }
         };
 
-        reloadTask.runTaskTimer(plugin, 20L, 20L);
+        reloadTask.runTaskTimer(plugin, 0L, 1L);
     }
 
     public void showBulletsOnXPBar(Player player) {
@@ -116,22 +113,24 @@ public abstract class Magazine {
     }
 
     public void showReloadTimeOnXPBar(Player player) {
-        int reloadTime = getReloadTime(player);
-        int maximumReload = getBullets(player) > 0 ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
+        long reloadTime = getReloadTime(player);
+        long maximumReload = getBullets(player) > getMinimumBullets() ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
 
-        player.setLevel(reloadTime);
+        player.setLevel((int) Math.ceil((double) reloadTime / 20L));
         player.setExp((float) reloadTime / maximumReload);
     }
 
     private int getMinimumBullets() {
-        return 0;
-    }
+        return 1;
+    } // The amount of bullets after which a full reload is going to happen
+    // Full reload: getMaximumMagazineReloadTime()
 
-    abstract int getMaximumBullets();
+    abstract int getMaximumBullets(); // The amount of bullets the gun can have at max,
+    // also the amount it gets after reload the magazine
 
-    abstract int getMaximumMagazineReloadTime();
+    abstract long getMaximumMagazineReloadTime(); // The time it takes to reload the whole magazine
 
-    abstract int getMaximumInMagazineReloadTime();
+    abstract long getMaximumInMagazineReloadTime(); // The time it takes to reload on bullet inside the magazine
 
-    abstract Material getGunItem();
+    abstract Material getGunItem(); // The item to shoot the gun
 }

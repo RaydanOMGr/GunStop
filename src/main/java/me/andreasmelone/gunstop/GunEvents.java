@@ -55,7 +55,7 @@ public class GunEvents implements Listener {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (deagle.isReloading(player)) {
-                    player.sendMessage("Reloading " + deagle.getReloadTime(player) + "... Please wait.");
+                    player.sendMessage("Reloading " + deagle.getReloadTime(player) / 20 + " seconds... Please wait.");
                     event.setCancelled(true);
                     return;
                 }
@@ -77,7 +77,7 @@ public class GunEvents implements Listener {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (rpg_1.isReloading(player)) {
-                    player.sendMessage("Reloading " + rpg_1.getReloadTime(player) + "... Please wait.");
+                    player.sendMessage("Reloading " + rpg_1.getReloadTime(player) / 20 + " seconds... Please wait.");
                     event.setCancelled(true);
                     return;
                 }
@@ -99,7 +99,7 @@ public class GunEvents implements Listener {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (ak_47.isReloading(player)) {
-                    player.sendMessage("Reloading " + ak_47.getReloadTime(player) + "... Please wait.");
+                    player.sendMessage("Reloading " + ak_47.getReloadTime(player) / 20 + " seconds... Please wait.");
                     event.setCancelled(true);
                     return;
                 }

@@ -14,13 +14,13 @@ public class DeagleMagazine extends Magazine {
     }
 
     @Override
-    int getMaximumMagazineReloadTime() {
-        return 15;
+    long getMaximumMagazineReloadTime() {
+        return 15 * 20;
     }
 
     @Override
-    int getMaximumInMagazineReloadTime() {
-        return 3;
+    long getMaximumInMagazineReloadTime() {
+        return 3 * 20;
     }
 
     @Override
