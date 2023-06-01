@@ -55,7 +55,7 @@ public class GunEvents implements Listener {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (deagle.isReloading(player)) {
-                    player.sendMessage("Reloading " + deagle.getReloadTime(player) / 20 + " seconds... Please wait.");
+                    player.sendMessage(plugin.mf.getReloadMessage(deagle, player));
                     event.setCancelled(true);
                     return;
                 }
@@ -66,18 +66,18 @@ public class GunEvents implements Listener {
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
 
-                arrow.setVelocity(player.getLocation().getDirection().multiply(8.05));
+                arrow.setVelocity(player.getLocation().getDirection().multiply(4));
                 arrow.setCritical(true);
                 arrow.setShooter(player);
 
                 arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
-                arrow.setMetadata("damage", new FixedMetadataValue(plugin, "15"));
+                arrow.setMetadata("damage", new FixedMetadataValue(plugin, "10"));
             } else if(itemType == rpg_1.getGunItem()) {
                 event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (rpg_1.isReloading(player)) {
-                    player.sendMessage("Reloading " + rpg_1.getReloadTime(player) / 20 + " seconds... Please wait.");
+                    player.sendMessage(plugin.mf.getReloadMessage(rpg_1, player));
                     event.setCancelled(true);
                     return;
                 }
@@ -87,7 +87,7 @@ public class GunEvents implements Listener {
 
                 // Shoot the projectile
                 TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
-                tnt.setVelocity(player.getLocation().getDirection().multiply(2.55));
+                tnt.setVelocity(player.getLocation().getDirection().multiply(2.75));
                 tnt.setFuseTicks(60);
 
                 tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
@@ -99,7 +99,7 @@ public class GunEvents implements Listener {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (ak_47.isReloading(player)) {
-                    player.sendMessage("Reloading " + ak_47.getReloadTime(player) / 20 + " seconds... Please wait.");
+                    player.sendMessage(plugin.mf.getReloadMessage(ak_47, player));
                     event.setCancelled(true);
                     return;
                 }
@@ -110,7 +110,7 @@ public class GunEvents implements Listener {
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
 
-                arrow.setVelocity(player.getLocation().getDirection().multiply(7.5));
+                arrow.setVelocity(player.getLocation().getDirection().multiply(3.5));
                 arrow.setCritical(true);
                 arrow.setShooter(player);
 
@@ -206,7 +206,7 @@ public class GunEvents implements Listener {
         }
 
         if(newItem != null) {
-            if(newItem.getType() == deagle.getGunItem()) {
+            if(deagle.matchesConditionsToShowXBBar(player)) {
                 if(deagle.hasBullets(player)) {
                     if(deagle.isReloading(player)) {
                         deagle.showReloadTimeOnXPBar(player);
@@ -214,7 +214,7 @@ public class GunEvents implements Listener {
                         deagle.showBulletsOnXPBar(player);
                     }
                 }
-            } else if(newItem.getType() == rpg_1.getGunItem()) {
+            } else if(rpg_1.matchesConditionsToShowXBBar(player)) {
                 if(rpg_1.hasBullets(player)) {
                     if(rpg_1.isReloading(player)) {
                         rpg_1.showReloadTimeOnXPBar(player);
@@ -222,7 +222,7 @@ public class GunEvents implements Listener {
                         rpg_1.showBulletsOnXPBar(player);
                     }
                 }
-            } else if(newItem.getType() == ak_47.getGunItem()) {
+            } else if(ak_47.matchesConditionsToShowXBBar(player)) {
                 if(ak_47.hasBullets(player)) {
                     if(ak_47.isReloading(player)) {
                         ak_47.showReloadTimeOnXPBar(player);

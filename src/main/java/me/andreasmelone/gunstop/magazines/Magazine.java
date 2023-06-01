@@ -59,7 +59,7 @@ public abstract class Magazine {
         // Set the XP bar to show the reload time
         //logger.info("Showing reload time on XP bar");
         //logger.info("Player Item in Hand: " + player.getItemInHand().getType());
-        if(player.getInventory().getItemInHand().getType() == getGunItem()) showReloadTimeOnXPBar(player);
+        if(matchesConditionsToShowXBBar(player)) showReloadTimeOnXPBar(player);
 
         // Schedule the reload completion
         //logger.info("Scheduling reload completion");
@@ -75,7 +75,7 @@ public abstract class Magazine {
 
                 // Set the XP bar to show the remaining reload time
                 //logger.info("Showing remaining reload time on XP bar");
-                if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                if (matchesConditionsToShowXBBar(updatedPlayer))
                     showReloadTimeOnXPBar(player);
 
                 // Update the reload time
@@ -94,7 +94,7 @@ public abstract class Magazine {
                     } else {
                         setBullets(player, getMaximumBullets());
                     }
-                    if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                    if (matchesConditionsToShowXBBar(updatedPlayer))
                         showBulletsOnXPBar(player);
                     cancel();
                 }
@@ -102,6 +102,10 @@ public abstract class Magazine {
         };
 
         reloadTask.runTaskTimer(plugin, 0L, 1L);
+    }
+
+    public boolean matchesConditionsToShowXBBar(Player player) {
+        return player.getInventory().getItemInHand().getType() == getGunItem() && getMaximumMagazineReloadTime() > 20;
     }
 
     public void showBulletsOnXPBar(Player player) {

@@ -1,5 +1,6 @@
 package me.andreasmelone.gunstop;
 
+import me.andreasmelone.gunstop.functions.MessageFunctions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -7,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GunStop extends JavaPlugin {
     public final Logger LOGGER = LogManager.getLogger();
+    public final MessageFunctions mf = new MessageFunctions();
     FileConfiguration config;
 
     @Override
