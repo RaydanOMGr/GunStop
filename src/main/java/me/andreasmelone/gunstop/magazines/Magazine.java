@@ -48,7 +48,7 @@ public abstract class Magazine {
 
     public void shoot(Player player) {
         int bullets = getBullets(player);
-        int minBullets = 1;
+        int minBullets = getMinimumBullets();
         //logger.info("Reloading " + player.getName() + " with " + bullets + " bullets");
 
         int reloadTime = bullets > minBullets ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
@@ -69,6 +69,8 @@ public abstract class Magazine {
                 Player updatedPlayer = player.getServer().getPlayer(player.getName());
                 int remainingReloadTime = getReloadTime(player) - 1;
 
+                setReloadTime(player, remainingReloadTime);
+
                 //logger.info("Updated Player Item in Hand: " + updatedPlayer.getItemInHand().getType());
 
                 // Set the XP bar to show the remaining reload time
@@ -78,7 +80,6 @@ public abstract class Magazine {
 
                 // Update the reload time
                 //logger.info("Updating reload time");
-                setReloadTime(player, remainingReloadTime);
                 //logger.info("Reload time: " + remainingReloadTime);
 
                 // Cancel the task if the reload time is over
@@ -120,6 +121,10 @@ public abstract class Magazine {
 
         player.setLevel(reloadTime);
         player.setExp((float) reloadTime / maximumReload);
+    }
+
+    private int getMinimumBullets() {
+        return 0;
     }
 
     abstract int getMaximumBullets();

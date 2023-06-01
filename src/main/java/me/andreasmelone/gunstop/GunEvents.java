@@ -35,7 +35,7 @@ public class GunEvents implements Listener {
 
     @EventHandler
     public void onPlayerShoot(PlayerInteractEvent event) {
-        if (!plugin.config.getString("whitelist").contains(event.getPlayer().getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(event.getPlayer().getWorld().getName())) {
             return;
         }
 
@@ -125,7 +125,7 @@ public class GunEvents implements Listener {
         //Player player = event.getPlayer();
         Entity item = event.getItem();
 
-        if (!plugin.config.getString("whitelist").contains(event.getPlayer().getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(event.getPlayer().getWorld().getName())) {
             return;
         }
 
@@ -146,7 +146,7 @@ public class GunEvents implements Listener {
         //Entity entity = event.getEntity();
         Entity damager = event.getDamager();
 
-        if (!plugin.config.getString("whitelist").contains(damager.getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(damager.getWorld().getName())) {
             return;
         }
 
@@ -176,7 +176,7 @@ public class GunEvents implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent event) {
-        if (!plugin.config.getString("whitelist").contains(event.getEntity().getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(event.getEntity().getWorld().getName())) {
             return;
         }
 
@@ -186,7 +186,7 @@ public class GunEvents implements Listener {
 
     @EventHandler
     public void onTntExplode(EntityExplodeEvent event) {
-        if (!plugin.config.getString("whitelist").contains(event.getEntity().getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(event.getEntity().getWorld().getName())) {
             return;
         }
 
@@ -201,12 +201,12 @@ public class GunEvents implements Listener {
     public void onSelectedSlotChange(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         ItemStack newItem = event.getPlayer().getInventory().getItem(event.getNewSlot());
-        if (!plugin.config.getString("whitelist").contains(player.getWorld().getName())) {
+        if (!plugin.config.getList("whitelist").contains(player.getWorld().getName())) {
             return;
         }
 
         if(newItem != null) {
-            if(newItem.getType() == Material.STONE_SPADE) {
+            if(newItem.getType() == deagle.getGunItem()) {
                 if(deagle.hasBullets(player)) {
                     if(deagle.isReloading(player)) {
                         deagle.showReloadTimeOnXPBar(player);
@@ -214,7 +214,7 @@ public class GunEvents implements Listener {
                         deagle.showBulletsOnXPBar(player);
                     }
                 }
-            } else if(newItem.getType() == Material.WOOD_SPADE) {
+            } else if(newItem.getType() == rpg_1.getGunItem()) {
                 if(rpg_1.hasBullets(player)) {
                     if(rpg_1.isReloading(player)) {
                         rpg_1.showReloadTimeOnXPBar(player);
@@ -222,7 +222,7 @@ public class GunEvents implements Listener {
                         rpg_1.showBulletsOnXPBar(player);
                     }
                 }
-            } else if(newItem.getType() == Material.WOOD_HOE) {
+            } else if(newItem.getType() == ak_47.getGunItem()) {
                 if(ak_47.hasBullets(player)) {
                     if(ak_47.isReloading(player)) {
                         ak_47.showReloadTimeOnXPBar(player);
