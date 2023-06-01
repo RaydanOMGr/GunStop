@@ -48,9 +48,10 @@ public abstract class Magazine {
 
     public void shoot(Player player) {
         int bullets = getBullets(player);
+        int minBullets = 1;
         //logger.info("Reloading " + player.getName() + " with " + bullets + " bullets");
 
-        int reloadTime = bullets > 0 ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
+        int reloadTime = bullets > minBullets ? getMaximumInMagazineReloadTime() : getMaximumMagazineReloadTime();
         //logger.info("Reload time: " + reloadTime);
         setReloadTime(player, reloadTime);
         //logger.info("Reload time: " + reloadTime + " maximum in magazine: " + getMaximumInMagazineReloadTime() + " maximum magazine: " + getMaximumMagazineReloadTime());
@@ -72,7 +73,8 @@ public abstract class Magazine {
 
                 // Set the XP bar to show the remaining reload time
                 //logger.info("Showing remaining reload time on XP bar");
-                if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showReloadTimeOnXPBar(player);
+                if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                    showReloadTimeOnXPBar(player);
 
                 // Update the reload time
                 //logger.info("Updating reload time");
@@ -86,12 +88,14 @@ public abstract class Magazine {
                     //logger.info("Reload time is over");
                     int bullets = getBullets(player);
                     //logger.info("Bullets: " + bullets);
-                    if(bullets > 1) {
-                        if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showBulletsOnXPBar(player);
+                    if (bullets > minBullets) {
+                        if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                            showBulletsOnXPBar(player);
                         setBullets(player, bullets - 1);
                         cancel();
                     } else {
-                        if(updatedPlayer.getInventory().getItemInHand().getType() == getGunItem()) showBulletsOnXPBar(player);
+                        if (updatedPlayer.getInventory().getItemInHand().getType() == getGunItem())
+                            showBulletsOnXPBar(player);
                         setBullets(player, getMaximumBullets());
                         cancel();
                     }
