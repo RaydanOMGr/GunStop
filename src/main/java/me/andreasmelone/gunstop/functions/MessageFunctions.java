@@ -8,11 +8,7 @@ public class MessageFunctions {
     public String getReloadMessage(Magazine magazine, Player player) {
         long reloadTime = magazine.getReloadTime(player);
         String message;
-        if(reloadTime < 20) {
-            message = "Reloading " + (reloadTime / 20)  / 1000 + " milliseconds...";
-        } else {
-            message = "Reloading " + reloadTime / 20 + " seconds...";
-        }
+        message = "Reloading " + reloadTime / 20 + " seconds...";
 
         return message;
     }

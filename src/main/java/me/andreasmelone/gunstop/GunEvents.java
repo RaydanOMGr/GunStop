@@ -2,6 +2,7 @@ package me.andreasmelone.gunstop;
 
 import me.andreasmelone.gunstop.magazines.AKMagazine;
 import me.andreasmelone.gunstop.magazines.DeagleMagazine;
+import me.andreasmelone.gunstop.magazines.FourShotRPGMagazine;
 import me.andreasmelone.gunstop.magazines.RPGMagazine;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
@@ -22,15 +23,17 @@ public class GunEvents implements Listener {
     private final Logger logger;
 
     DeagleMagazine deagle;
-    RPGMagazine rpg_1;
+    RPGMagazine rpg;
     AKMagazine ak_47;
+    FourShotRPGMagazine fourShotRpg;
 
     public GunEvents(GunStop gunStop) {
         plugin = gunStop;
         logger = plugin.LOGGER;
         deagle = new DeagleMagazine(plugin);
-        rpg_1 = new RPGMagazine(plugin);
+        rpg = new RPGMagazine(plugin);
         ak_47 = new AKMagazine(plugin);
+        fourShotRpg = new FourShotRPGMagazine(plugin);
     }
 
     @EventHandler
@@ -40,6 +43,8 @@ public class GunEvents implements Listener {
         }
 
         Player player = event.getPlayer();
+
+        event.setCancelled(true);
 
         if (event.getItem() != null) {
             ItemStack item = event.getItem();
@@ -51,12 +56,10 @@ public class GunEvents implements Listener {
             Material itemType = item.getType();
 
             if (itemType == deagle.getGunItem()) {
-                event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (deagle.isReloading(player)) {
                     player.sendMessage(plugin.mf.getReloadMessage(deagle, player));
-                    event.setCancelled(true);
                     return;
                 }
 
@@ -72,18 +75,16 @@ public class GunEvents implements Listener {
 
                 arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 arrow.setMetadata("damage", new FixedMetadataValue(plugin, "10"));
-            } else if(itemType == rpg_1.getGunItem()) {
-                event.setCancelled(true);
+            } else if(itemType == rpg.getGunItem()) {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
-                if (rpg_1.isReloading(player)) {
-                    player.sendMessage(plugin.mf.getReloadMessage(rpg_1, player));
-                    event.setCancelled(true);
+                if (rpg.isReloading(player)) {
+                    player.sendMessage(plugin.mf.getReloadMessage(rpg, player));
                     return;
                 }
 
                 // Start the reload
-                rpg_1.shoot(player);
+                rpg.shoot(player);
 
                 // Shoot the projectile
                 TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
@@ -91,16 +92,12 @@ public class GunEvents implements Listener {
                 tnt.setFuseTicks(60);
 
                 tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
-                tnt.setMetadata("damage", new FixedMetadataValue(plugin, "35"));
-
-                event.setCancelled(true);
+                tnt.setMetadata("damage", new FixedMetadataValue(plugin, "40"));
             } else if(itemType == ak_47.getGunItem()) {
-                event.setCancelled(true);
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
                 if (ak_47.isReloading(player)) {
                     player.sendMessage(plugin.mf.getReloadMessage(ak_47, player));
-                    event.setCancelled(true);
                     return;
                 }
 
@@ -116,6 +113,25 @@ public class GunEvents implements Listener {
 
                 arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 arrow.setMetadata("damage", new FixedMetadataValue(plugin, "3"));
+            } else if(itemType == fourShotRpg.getGunItem()) {
+                //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
+                // Check if the player is reloading
+                if (fourShotRpg.isReloading(player)) {
+                    player.sendMessage(plugin.mf.getReloadMessage(fourShotRpg, player));
+                    return;
+                }
+
+                // Start the reload
+                fourShotRpg.shoot(player);
+
+                // Shoot the projectile
+                TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
+                tnt.setVelocity(player.getLocation().getDirection().multiply(2.25));
+                tnt.setFuseTicks(60);
+
+
+                tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                tnt.setMetadata("damage", new FixedMetadataValue(plugin, "25"));
             }
         }
     }
@@ -214,12 +230,12 @@ public class GunEvents implements Listener {
                         deagle.showBulletsOnXPBar(player);
                     }
                 }
-            } else if(rpg_1.matchesConditionsToShowXBBar(player)) {
-                if(rpg_1.hasBullets(player)) {
-                    if(rpg_1.isReloading(player)) {
-                        rpg_1.showReloadTimeOnXPBar(player);
+            } else if(rpg.matchesConditionsToShowXBBar(player)) {
+                if(rpg.hasBullets(player)) {
+                    if(rpg.isReloading(player)) {
+                        rpg.showReloadTimeOnXPBar(player);
                     } else {
-                        rpg_1.showBulletsOnXPBar(player);
+                        rpg.showBulletsOnXPBar(player);
                     }
                 }
             } else if(ak_47.matchesConditionsToShowXBBar(player)) {

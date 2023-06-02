@@ -4,6 +4,7 @@ import me.andreasmelone.gunstop.GunStop;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -66,7 +67,6 @@ public abstract class Magazine {
         BukkitRunnable reloadTask = new BukkitRunnable() {
             @Override
             public void run() {
-                Player updatedPlayer = player.getServer().getPlayer(player.getName());
                 long remainingReloadTime = getReloadTime(player) - 1;
 
                 setReloadTime(player, remainingReloadTime);
@@ -75,6 +75,7 @@ public abstract class Magazine {
 
                 // Set the XP bar to show the remaining reload time
                 //logger.info("Showing remaining reload time on XP bar");
+                Player updatedPlayer = player.getServer().getPlayer(player.getName());
                 if (matchesConditionsToShowXBBar(updatedPlayer))
                     showReloadTimeOnXPBar(player);
 
@@ -94,6 +95,7 @@ public abstract class Magazine {
                     } else {
                         setBullets(player, getMaximumBullets());
                     }
+                    updatedPlayer = player.getServer().getPlayer(player.getName());
                     if (matchesConditionsToShowXBBar(updatedPlayer))
                         showBulletsOnXPBar(player);
                     cancel();
@@ -105,7 +107,10 @@ public abstract class Magazine {
     }
 
     public boolean matchesConditionsToShowXBBar(Player player) {
-        return player.getInventory().getItemInHand().getType() == getGunItem() && getMaximumMagazineReloadTime() > 20;
+        ItemStack itemInHand = player.getItemInHand();
+        logger.info(itemInHand);
+        if(itemInHand == null) return false;
+        return itemInHand.getType() == getGunItem();
     }
 
     public void showBulletsOnXPBar(Player player) {
@@ -136,5 +141,5 @@ public abstract class Magazine {
 
     abstract long getMaximumInMagazineReloadTime(); // The time it takes to reload on bullet inside the magazine
 
-    abstract Material getGunItem(); // The item to shoot the gun
+    public abstract Material getGunItem(); // The item to shoot the gun
 }
