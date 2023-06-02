@@ -108,9 +108,13 @@ public abstract class Magazine {
 
     public boolean matchesConditionsToShowXBBar(Player player) {
         ItemStack itemInHand = player.getItemInHand();
-        logger.info(itemInHand);
         if(itemInHand == null) return false;
         return itemInHand.getType() == getGunItem();
+    }
+
+    public boolean matchesConditionsToShowXBBar(Player player, ItemStack item) {
+        if(item == null) return false;
+        return item.getType() == getGunItem();
     }
 
     public void showBulletsOnXPBar(Player player) {

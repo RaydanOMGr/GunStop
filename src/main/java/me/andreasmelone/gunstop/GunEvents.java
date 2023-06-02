@@ -222,34 +222,10 @@ public class GunEvents implements Listener {
         }
 
         if(newItem != null) {
-            if(deagle.matchesConditionsToShowXBBar(player)) {
-                if(deagle.hasBullets(player)) {
-                    if(deagle.isReloading(player)) {
-                        deagle.showReloadTimeOnXPBar(player);
-                    } else {
-                        deagle.showBulletsOnXPBar(player);
-                    }
-                }
-            } else if(rpg.matchesConditionsToShowXBBar(player)) {
-                if(rpg.hasBullets(player)) {
-                    if(rpg.isReloading(player)) {
-                        rpg.showReloadTimeOnXPBar(player);
-                    } else {
-                        rpg.showBulletsOnXPBar(player);
-                    }
-                }
-            } else if(ak_47.matchesConditionsToShowXBBar(player)) {
-                if(ak_47.hasBullets(player)) {
-                    if(ak_47.isReloading(player)) {
-                        ak_47.showReloadTimeOnXPBar(player);
-                    } else {
-                        ak_47.showBulletsOnXPBar(player);
-                    }
-                }
-            } else {
-                player.setExp(0);
-                player.setLevel(0);
-            }
+            plugin.of.showExpBarForMagazine(deagle, player, newItem);
+            plugin.of.showExpBarForMagazine(rpg, player, newItem);
+            plugin.of.showExpBarForMagazine(ak_47, player, newItem);
+            plugin.of.showExpBarForMagazine(fourShotRpg, player, newItem);
         } else {
             player.setExp(0);
             player.setLevel(0);
