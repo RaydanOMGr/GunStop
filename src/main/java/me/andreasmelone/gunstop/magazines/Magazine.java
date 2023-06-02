@@ -76,6 +76,11 @@ public abstract class Magazine {
                 // Set the XP bar to show the remaining reload time
                 //logger.info("Showing remaining reload time on XP bar");
                 Player updatedPlayer = player.getServer().getPlayer(player.getName());
+                if(updatedPlayer == null) {
+                    cancel();
+                    return;
+                }
+
                 if (matchesConditionsToShowXBBar(updatedPlayer))
                     showReloadTimeOnXPBar(player);
 

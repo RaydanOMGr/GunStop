@@ -16,7 +16,7 @@ public final class GunStop extends JavaPlugin {
     @Override
     public void onEnable() {
         mf = new MessageFunctions();
-        of = new OtherFunctions();
+        of = new OtherFunctions(this);
         // load the config, the file already exists
         saveDefaultConfig();
         config  = getConfig();

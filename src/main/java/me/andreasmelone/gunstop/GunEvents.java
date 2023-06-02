@@ -1,10 +1,8 @@
 package me.andreasmelone.gunstop;
 
-import me.andreasmelone.gunstop.magazines.AKMagazine;
-import me.andreasmelone.gunstop.magazines.DeagleMagazine;
-import me.andreasmelone.gunstop.magazines.FourShotRPGMagazine;
-import me.andreasmelone.gunstop.magazines.RPGMagazine;
+import me.andreasmelone.gunstop.magazines.*;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -17,6 +15,10 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GunEvents implements Listener {
     private final GunStop plugin;
@@ -26,14 +28,17 @@ public class GunEvents implements Listener {
     RPGMagazine rpg;
     AKMagazine ak_47;
     FourShotRPGMagazine fourShotRpg;
+    AWPMagazine awp;
 
     public GunEvents(GunStop gunStop) {
         plugin = gunStop;
         logger = plugin.LOGGER;
+
         deagle = new DeagleMagazine(plugin);
         rpg = new RPGMagazine(plugin);
         ak_47 = new AKMagazine(plugin);
         fourShotRpg = new FourShotRPGMagazine(plugin);
+        awp = new AWPMagazine(plugin);
     }
 
     @EventHandler
@@ -132,6 +137,42 @@ public class GunEvents implements Listener {
 
                 tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 tnt.setMetadata("damage", new FixedMetadataValue(plugin, "25"));
+            } else if(itemType == awp.getGunItem()) {
+                // Check if the player is reloading
+                if (awp.isReloading(player)) {
+                    player.sendMessage(plugin.mf.getReloadMessage(awp, player));
+                    return;
+                }
+
+                // Start the reload
+                awp.shoot(player);
+
+                // Shoot the projectile
+                Arrow arrow = player.launchProjectile(Arrow.class);
+                Vector v = player.getLocation().getDirection().multiply(4);
+
+                arrow.setVelocity(v);
+                arrow.setCritical(true);
+                arrow.setShooter(player);
+
+                arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                arrow.setMetadata("damage", new FixedMetadataValue(plugin, "35"));
+
+                AtomicInteger loopCounter = new AtomicInteger(200);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        logger.info("Loop Counter: " + loopCounter.get());
+                        if(loopCounter.get() <= 0) cancel();
+                        loopCounter.getAndDecrement();
+
+                        if(!arrow.isOnGround()) {
+                            arrow.setVelocity(v);
+                        } else {
+                            loopCounter.set(0);
+                        }
+                    }
+                }.runTaskTimer(plugin, 0, 1);
             }
         }
     }
@@ -222,10 +263,40 @@ public class GunEvents implements Listener {
         }
 
         if(newItem != null) {
-            plugin.of.showExpBarForMagazine(deagle, player, newItem);
-            plugin.of.showExpBarForMagazine(rpg, player, newItem);
-            plugin.of.showExpBarForMagazine(ak_47, player, newItem);
-            plugin.of.showExpBarForMagazine(fourShotRpg, player, newItem);
+            if(plugin.of.matchesConditionsToShowExpBar(deagle, player, newItem)) {
+                if(deagle.isReloading(player)) {
+                    deagle.showReloadTimeOnXPBar(player);
+                } else {
+                    deagle.showBulletsOnXPBar(player);
+                }
+            } else if(plugin.of.matchesConditionsToShowExpBar(rpg, player, newItem)) {
+                if(rpg.isReloading(player)) {
+                    rpg.showReloadTimeOnXPBar(player);
+                } else {
+                    rpg.showBulletsOnXPBar(player);
+                }
+            } else if(plugin.of.matchesConditionsToShowExpBar(ak_47, player, newItem)) {
+                if(ak_47.isReloading(player)) {
+                    ak_47.showReloadTimeOnXPBar(player);
+                } else {
+                    ak_47.showBulletsOnXPBar(player);
+                }
+            } else if(plugin.of.matchesConditionsToShowExpBar(fourShotRpg, player, newItem)) {
+                if(fourShotRpg.isReloading(player)) {
+                    fourShotRpg.showReloadTimeOnXPBar(player);
+                } else {
+                    fourShotRpg.showBulletsOnXPBar(player);
+                }
+            } else if(plugin.of.matchesConditionsToShowExpBar(awp, player, newItem)) {
+                if(awp.isReloading(player)) {
+                    awp.showReloadTimeOnXPBar(player);
+                } else {
+                    awp.showBulletsOnXPBar(player);
+                }
+            } else {
+                player.setExp(0);
+                player.setLevel(0);
+            }
         } else {
             player.setExp(0);
             player.setLevel(0);

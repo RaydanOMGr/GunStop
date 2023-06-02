@@ -3,28 +3,28 @@ package me.andreasmelone.gunstop.magazines;
 import me.andreasmelone.gunstop.GunStop;
 import org.bukkit.Material;
 
-public class FourShotRPGMagazine extends Magazine {
-    public FourShotRPGMagazine(GunStop plugin) {
+public class AWPMagazine extends Magazine {
+    public AWPMagazine(GunStop plugin) {
         super(plugin);
     }
 
     @Override
     int getMaximumBullets() {
-        return 4;
+        return 1;
     }
 
     @Override
     long getMaximumMagazineReloadTime() {
-        return 50 * 20;
+        return 200;
     }
 
     @Override
     long getMaximumInMagazineReloadTime() {
-        return 15; // 0.75 seconds
+        return 0;
     }
 
     @Override
     public Material getGunItem() {
-        return Material.GOLD_SPADE;
+        return Material.STONE_HOE;
     }
 }

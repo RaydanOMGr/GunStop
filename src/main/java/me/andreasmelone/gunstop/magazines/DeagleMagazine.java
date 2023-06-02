@@ -10,7 +10,7 @@ public class DeagleMagazine extends Magazine {
 
     @Override
     int getMaximumBullets() {
-        return 6;
+        return 4;
     }
 
     @Override
