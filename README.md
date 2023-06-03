@@ -1,4 +1,4 @@
-# GunStop
+## GunStop
 This plugin (GunStop) is made for my Minecraft Server. It adds various kinds of guns.
 
 # Configuration
