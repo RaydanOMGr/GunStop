@@ -21,6 +21,7 @@ public final class GunStop extends JavaPlugin {
     public AKMagazine ak_47;
     public FourShotRPGMagazine fourShotRpg;
     public AWPMagazine awp;
+    public ShotGunMagazine shotgun;
 
     FileConfiguration config;
 
@@ -35,6 +36,8 @@ public final class GunStop extends JavaPlugin {
         ak_47 = new AKMagazine(this);
         fourShotRpg = new FourShotRPGMagazine(this);
         awp = new AWPMagazine(this);
+        shotgun = new ShotGunMagazine(this);
+
         // load the config, the file already exists
         saveDefaultConfig();
         config  = getConfig();

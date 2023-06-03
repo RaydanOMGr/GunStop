@@ -29,6 +29,7 @@ public class GunEvents implements Listener {
     AKMagazine ak_47;
     FourShotRPGMagazine fourShotRpg;
     AWPMagazine awp;
+    ShotGunMagazine shotgun;
 
     public GunEvents(GunStop gunStop) {
         plugin = gunStop;
@@ -39,6 +40,7 @@ public class GunEvents implements Listener {
         ak_47 = plugin.ak_47;
         fourShotRpg = plugin.fourShotRpg;
         awp = plugin.awp;
+        shotgun = plugin.shotgun;
     }
 
     @EventHandler
@@ -74,7 +76,7 @@ public class GunEvents implements Listener {
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
 
-                arrow.setVelocity(player.getLocation().getDirection().multiply(4));
+                arrow.setVelocity(player.getEyeLocation().getDirection().multiply(4));
                 arrow.setCritical(true);
                 arrow.setShooter(player);
 
@@ -91,13 +93,36 @@ public class GunEvents implements Listener {
                 // Start the reload
                 rpg.shoot(player);
 
+                Vector v = player.getEyeLocation().getDirection().multiply(2.75);
+
                 // Shoot the projectile
-                TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
-                tnt.setVelocity(player.getLocation().getDirection().multiply(2.75));
+                TNTPrimed tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
+                tnt.setVelocity(v);
                 tnt.setFuseTicks(60);
 
                 tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 tnt.setMetadata("damage", new FixedMetadataValue(plugin, "40"));
+
+                AtomicInteger counter = new AtomicInteger(60);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if(tnt.isDead()) {
+                            cancel();
+                            return;
+                        }
+                        if(tnt.isOnGround()) {
+                            tnt.setVelocity(v.zero());
+                            cancel();
+                            return;
+                        }
+
+                        if(counter.get() <= 0) cancel();
+                        counter.getAndDecrement();
+
+                        tnt.setVelocity(v);
+                    }
+                }.runTaskTimer(plugin, 0, 1);
             } else if(itemType == ak_47.getGunItem()) {
                 //plugin.LOGGER.info("Player " + player.getName() + " shot with " + item.getType().name() + " in world " + player.getWorld().getName() + ".");
                 // Check if the player is reloading
@@ -112,7 +137,7 @@ public class GunEvents implements Listener {
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
 
-                arrow.setVelocity(player.getLocation().getDirection().multiply(3.5));
+                arrow.setVelocity(player.getEyeLocation().getDirection().multiply(3.5));
                 arrow.setCritical(true);
                 arrow.setShooter(player);
 
@@ -131,12 +156,31 @@ public class GunEvents implements Listener {
 
                 // Shoot the projectile
                 TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
-                tnt.setVelocity(player.getLocation().getDirection().multiply(2.25));
+                tnt.setVelocity(player.getEyeLocation().getDirection().multiply(2.25));
                 tnt.setFuseTicks(60);
 
 
                 tnt.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
                 tnt.setMetadata("damage", new FixedMetadataValue(plugin, "25"));
+
+                AtomicInteger counter = new AtomicInteger(60);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if(tnt.isDead()) {
+                            cancel();
+                            return;
+                        }
+                        if(tnt.isOnGround()) {
+                            tnt.setVelocity(new Vector().zero());
+                            cancel();
+                            return;
+                        }
+
+                        if(counter.get() <= 0) cancel();
+                        counter.getAndDecrement();
+                    }
+                }.runTaskTimer(plugin, 0, 1);
             } else if(itemType == awp.getGunItem()) {
                 // Check if the player is reloading
                 if (awp.isReloading(player)) {
@@ -149,7 +193,7 @@ public class GunEvents implements Listener {
 
                 // Shoot the projectile
                 Arrow arrow = player.launchProjectile(Arrow.class);
-                Vector v = player.getLocation().getDirection().multiply(4);
+                Vector v = player.getEyeLocation().getDirection().multiply(4);
 
                 arrow.setVelocity(v);
                 arrow.setCritical(true);
@@ -172,6 +216,20 @@ public class GunEvents implements Listener {
                         }
                     }
                 }.runTaskTimer(plugin, 0, 1);
+            } else if(itemType == shotgun.getGunItem()) {
+                // Check if the player is reloading
+                if (shotgun.isReloading(player)) {
+                    player.sendMessage(plugin.mf.getReloadMessage(ak_47, player));
+                    return;
+                }
+
+                // Start the reload
+                for(int i = 0; i < 4; i++) {
+                    shotgun.shoot(player);
+                }
+
+                // Shoot the projectile
+                plugin.of.getAngledVector(player.getLocation().getDirection(), 0, 0);
             }
         }
     }
