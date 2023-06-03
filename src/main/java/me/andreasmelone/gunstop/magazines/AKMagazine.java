@@ -27,4 +27,14 @@ public class AKMagazine extends Magazine {
     public Material getGunItem() {
         return Material.WOOD_HOE;
     }
+
+    @Override
+    public String getGunID() {
+        return "ak_47";
+    }
+
+    @Override
+    public String getGunName() {
+        return "AK 47";
+    }
 }

@@ -15,7 +15,7 @@ public class AWPMagazine extends Magazine {
 
     @Override
     long getMaximumMagazineReloadTime() {
-        return 200;
+        return 12 * 20 + 10;
     }
 
     @Override
@@ -26,5 +26,15 @@ public class AWPMagazine extends Magazine {
     @Override
     public Material getGunItem() {
         return Material.STONE_HOE;
+    }
+
+    @Override
+    public String getGunID() {
+        return "awp";
+    }
+
+    @Override
+    public String getGunName() {
+        return "AWP Sniper Rifle";
     }
 }

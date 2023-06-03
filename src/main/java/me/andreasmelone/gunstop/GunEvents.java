@@ -34,11 +34,11 @@ public class GunEvents implements Listener {
         plugin = gunStop;
         logger = plugin.LOGGER;
 
-        deagle = new DeagleMagazine(plugin);
-        rpg = new RPGMagazine(plugin);
-        ak_47 = new AKMagazine(plugin);
-        fourShotRpg = new FourShotRPGMagazine(plugin);
-        awp = new AWPMagazine(plugin);
+        deagle = plugin.deagle;
+        rpg = plugin.rpg;
+        ak_47 = plugin.ak_47;
+        fourShotRpg = plugin.fourShotRpg;
+        awp = plugin.awp;
     }
 
     @EventHandler
@@ -162,7 +162,6 @@ public class GunEvents implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        logger.info("Loop Counter: " + loopCounter.get());
                         if(loopCounter.get() <= 0) cancel();
                         loopCounter.getAndDecrement();
 

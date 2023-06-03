@@ -27,4 +27,14 @@ public class DeagleMagazine extends Magazine {
     public Material getGunItem() {
         return Material.STONE_SPADE;
     }
+
+    @Override
+    public String getGunID() {
+        return "desert_eagle";
+    }
+
+    @Override
+    public String getGunName() {
+        return "Desert Eagle";
+    }
 }

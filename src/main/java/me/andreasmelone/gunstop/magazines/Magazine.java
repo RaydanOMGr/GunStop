@@ -151,4 +151,7 @@ public abstract class Magazine {
     abstract long getMaximumInMagazineReloadTime(); // The time it takes to reload on bullet inside the magazine
 
     public abstract Material getGunItem(); // The item to shoot the gun
+
+    public abstract String getGunID(); // The identificator of the gun
+    public abstract String getGunName(); // The name of the gun
 }

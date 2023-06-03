@@ -3,3 +3,9 @@ version: '${project.version}'
 main: me.andreasmelone.gunstop.GunStop
 author: AndreasMelone
 load: STARTUP
+commands:
+    givegun:
+        description: Give a gun to a player
+        usage: /givegun
+        aliases: [giveg]
+        permission: gunstop.givegun

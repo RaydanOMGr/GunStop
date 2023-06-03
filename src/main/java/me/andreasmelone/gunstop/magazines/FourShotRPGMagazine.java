@@ -27,4 +27,14 @@ public class FourShotRPGMagazine extends Magazine {
     public Material getGunItem() {
         return Material.GOLD_SPADE;
     }
+
+    @Override
+    public String getGunID() {
+        return "four_shot_rpg";
+    }
+
+    @Override
+    public String getGunName() {
+        return "Quad Rocket Launcher";
+    }
 }

@@ -27,4 +27,14 @@ public class RPGMagazine extends Magazine {
     public Material getGunItem() {
         return Material.WOOD_SPADE;
     }
+
+    @Override
+    public String getGunID() {
+        return "rpg";
+    }
+
+    @Override
+    public String getGunName() {
+        return "Rocket Launcher";
+    }
 }
