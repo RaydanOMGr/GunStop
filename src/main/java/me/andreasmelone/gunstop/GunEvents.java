@@ -228,18 +228,29 @@ public class GunEvents implements Listener {
 
 
                 // Shoot the projectile
-                List<Vector> vs = plugin.of.getAngledVector(player.getEyeLocation().getDirection(), 8.0, 4.0, 0);
-                logger.info(vs.size());
-                for(Vector v : vs) {
-                    Arrow arrow = player.launchProjectile(Arrow.class);
+                List<Vector> vs = plugin.of.getAngledVector(player.getEyeLocation().getDirection(), 15.0, 7.5, 4);
+                AtomicInteger counter = new AtomicInteger(0);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if(counter.get() >= vs.size()) {
+                            cancel();
+                            return;
+                        }
+                        Vector v = vs.get(counter.get());
 
-                    arrow.setVelocity(v);
-                    arrow.setCritical(true);
-                    arrow.setShooter(player);
+                        counter.getAndAdd(1);
 
-                    arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
-                    arrow.setMetadata("damage", new FixedMetadataValue(plugin, "5.5"));
-                }
+                        Arrow arrow = player.launchProjectile(Arrow.class);
+
+                        arrow.setVelocity(v);
+                        arrow.setCritical(true);
+                        arrow.setShooter(player);
+
+                        arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                        arrow.setMetadata("damage", new FixedMetadataValue(plugin, "5.5"));
+                    }
+                }.runTaskTimer(plugin, 0, 2);
             }
         }
     }
@@ -359,6 +370,12 @@ public class GunEvents implements Listener {
                     awp.showReloadTimeOnXPBar(player);
                 } else {
                     awp.showBulletsOnXPBar(player);
+                }
+            } else if(plugin.of.matchesConditionsToShowExpBar(shotgun, player, newItem)) {
+                if(shotgun.isReloading(player)) {
+                    shotgun.showReloadTimeOnXPBar(player);
+                } else {
+                    shotgun.showBulletsOnXPBar(player);
                 }
             } else {
                 player.setExp(0);

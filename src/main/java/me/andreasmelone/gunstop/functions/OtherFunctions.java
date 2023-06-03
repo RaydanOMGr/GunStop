@@ -21,11 +21,13 @@ public class OtherFunctions {
         return magazine.matchesConditionsToShowXBBar(player, newItem) && magazine.hasBullets(player);
     }
 
-    public List<Vector> getAngledVector(Vector direction, double spreadAngle, double angleIncrement, int amount) {
+    public List<Vector> getAngledVector(Vector v, double spreadAngle, double angleIncrement, int amount) {
         List<Vector> vectors = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
             double angle = Math.toRadians(spreadAngle);
+
+            Vector direction = v.clone();
 
             // Calculate the new direction vector based on the angle
             double x = direction.getX();
