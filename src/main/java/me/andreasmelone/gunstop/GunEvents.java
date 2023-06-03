@@ -229,7 +229,17 @@ public class GunEvents implements Listener {
                 }
 
                 // Shoot the projectile
-                plugin.of.getAngledVector(player.getLocation().getDirection(), 0, 0);
+                Vector[] vs = plugin.of.getAngledVector(player.getLocation().getDirection(), 8.0, 4.0, 0).toArray(new Vector[0]);
+                for(Vector v : vs) {
+                    Arrow arrow = player.launchProjectile(Arrow.class);
+
+                    arrow.setVelocity(v);
+                    arrow.setCritical(true);
+                    arrow.setShooter(player);
+
+                    arrow.setMetadata("isBullet", new FixedMetadataValue(plugin, "true"));
+                    arrow.setMetadata("damage", new FixedMetadataValue(plugin, "5.5"));
+                }
             }
         }
     }
