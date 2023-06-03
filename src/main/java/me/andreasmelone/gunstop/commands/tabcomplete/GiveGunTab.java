@@ -30,7 +30,7 @@ public class GiveGunTab implements TabCompleter {
             }
             return Arrays.asList(players);
         } else if(strings.length == 2) {
-            String[] guns = {plugin.deagle.getGunID(), plugin.rpg.getGunID(), plugin.ak_47.getGunID(), plugin.fourShotRpg.getGunID(), plugin.awp.getGunID()};
+            String[] guns = {plugin.deagle.getGunID(), plugin.rpg.getGunID(), plugin.ak_47.getGunID(), plugin.fourShotRpg.getGunID(), plugin.awp.getGunID(), plugin.shotgun.getGunID()};
             return Arrays.asList(guns);
         } else {
             return null;

@@ -2,7 +2,6 @@ package me.andreasmelone.gunstop;
 
 import me.andreasmelone.gunstop.magazines.*;
 import org.apache.logging.log4j.Logger;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -18,6 +17,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GunEvents implements Listener {
@@ -155,7 +155,7 @@ public class GunEvents implements Listener {
                 fourShotRpg.shoot(player);
 
                 // Shoot the projectile
-                TNTPrimed tnt = player.getWorld().spawn(player.getLocation(), TNTPrimed.class);
+                TNTPrimed tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
                 tnt.setVelocity(player.getEyeLocation().getDirection().multiply(2.25));
                 tnt.setFuseTicks(60);
 
@@ -219,17 +219,17 @@ public class GunEvents implements Listener {
             } else if(itemType == shotgun.getGunItem()) {
                 // Check if the player is reloading
                 if (shotgun.isReloading(player)) {
-                    player.sendMessage(plugin.mf.getReloadMessage(ak_47, player));
+                    player.sendMessage(plugin.mf.getReloadMessage(shotgun, player));
                     return;
                 }
 
                 // Start the reload
-                for(int i = 0; i < 4; i++) {
-                    shotgun.shoot(player);
-                }
+                shotgun.shoot(player);
+
 
                 // Shoot the projectile
-                Vector[] vs = plugin.of.getAngledVector(player.getLocation().getDirection(), 8.0, 4.0, 0).toArray(new Vector[0]);
+                List<Vector> vs = plugin.of.getAngledVector(player.getEyeLocation().getDirection(), 8.0, 4.0, 0);
+                logger.info(vs.size());
                 for(Vector v : vs) {
                     Arrow arrow = player.launchProjectile(Arrow.class);
 

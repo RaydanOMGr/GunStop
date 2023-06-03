@@ -10,12 +10,12 @@ public class ShotGunMagazine extends Magazine {
 
     @Override
     int getMaximumBullets() {
-        return 4;
+        return 1;
     }
 
     @Override
     long getMaximumMagazineReloadTime() {
-        return 15;
+        return 15 * 20;
     }
 
     @Override

@@ -74,6 +74,14 @@ public class GiveGun implements CommandExecutor {
             item.setItemMeta(meta);
 
             target.getInventory().addItem(item);
+        } else if(gunID.equals(plugin.shotgun.getGunID())) {
+            ItemStack item = new ItemStack(plugin.shotgun.getGunItem(), 1);
+            ItemMeta meta = item.getItemMeta();
+
+            meta.setDisplayName(plugin.shotgun.getGunName());
+            item.setItemMeta(meta);
+
+            target.getInventory().addItem(item);
         } else {
             commandSender.sendMessage("This item does not exist.");
             return true;
